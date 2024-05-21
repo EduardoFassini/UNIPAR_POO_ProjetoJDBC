@@ -25,12 +25,13 @@ public class Main {
             Connection conn = connection();
 
             Statement statement = conn.createStatement();
-            String sql = " CREATE TABLE IF NOT EXISTS usuarios ( "
-                    + " codigo SERIAL PRIMARY KEY, "
-                    + " username VARCHAR(50) UNIQUE NOT NULL, "
-                    + " password VARCHAR(300) NOT NULL), "
-                    + " nome VARCHAR(50) NOT NULL), "
-                    + " nascimento DATE )";
+            String sql = " CREATE TABLE IF NOT EXISTS usuario ("
+                        + "codigo SERIAL PRIMARY KEY,"
+                        + "username VARCHAR(50) NOT NULL UNIQUE,"
+                        + "password VARCHAR(300) NOT NULL,"
+                        + "nome VARCHAR(50) NOT NULL,"
+                        + "nascimento DATE"
+                        + ");";
 
             statement.executeUpdate(sql);
 
