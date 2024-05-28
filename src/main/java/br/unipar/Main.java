@@ -32,7 +32,7 @@ public class Main {
 
             statement.executeUpdate(sql);
 
-            System.out.println("Tabela criada com sucesso");
+            System.out.println("Tabela de usuários criada com sucesso");
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -80,5 +80,64 @@ public class Main {
         }
     }
 
+    public static void criarTabelaCliente() {
+        try {
+            Connection conn = connection();
+
+            Statement statement = conn.createStatement();
+            String sql = " CREATE TABLE IF NOT EXISTS cliente ("
+                    + "id_cliente SERIAL CONSTRAINT PK_CLIENTE PRIMARY KEY,"
+                    + "nome VARCHAR(255) NOT NULL,"
+                    + "CPF VARCHAR(15) UNIQUE"
+                    + ");";
+
+            statement.executeUpdate(sql);
+
+            System.out.println("Tabela de clientes criada com sucesso");
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static void criarTabelaProduto() {
+        try {
+            Connection conn = connection();
+
+            Statement statement = conn.createStatement();
+            String sql = " CREATE TABLE IF NOT EXISTS cliente ("
+                    + "id_produto SERIAL CONSTRAINT PK_PRODUTO PRIMARY KEY,"
+                    + "descricao VARCHAR(255) NOT NULL,"
+                    + "valor MONEY NOT NULL"
+                    + ");";
+
+            statement.executeUpdate(sql);
+
+            System.out.println("Tabela de clientes criada com sucesso");
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static void criarTabelaVenda() {
+        try {
+            Connection conn = connection();
+
+            Statement statement = conn.createStatement();
+            String sql = " CREATE TABLE IF NOT EXISTS venda ("
+                    + "id_venda SERIAL CONSTRAINT PK_VENDA PRIMARY KEY,"
+                    + "cliente INTEGER CONSTRAINT FK_CLIENTE REFERENCES cliente(id_cliente),"
+                    + "produto INTEGER CONSTRAINT FK_PRODUTO REFERENCES produto(id_produto)"
+                    + ");";
+
+            statement.executeUpdate(sql);
+
+            System.out.println("Tabela de vendas criada com sucesso");
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
 
 }
