@@ -4,11 +4,6 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.Scanner;
 
-
-//usar metodo usuario existente para as pesquisas de exclusao e alteracao
-
-
-
 public class Main {
 
     private static final String url = "jdbc:postgresql://localhost:5432/exemplo1";
@@ -21,42 +16,116 @@ public class Main {
         criarTabelaCliente();
         criarTabelaProduto();
         criarTabelaVenda();
+        boolean menu=true,menuUsuario,menuCliente,menuProduto,menuVenda;
 
-        while (true) {
+        while(menu) {
             System.out.println();
-            System.out.println("Menu de Usuário:");
-            System.out.println("Escolha uma opção: ");
-            System.out.println("1 - Inserir");
-            System.out.println("2 - Alterar");
-            System.out.println("3 - Listar");
-            System.out.println("4 - Excluir");
+            System.out.println("[ Menu Principal ]");
+            System.out.println("Escolha uma tabela para acessar seu menu:");
+            System.out.println("1 - Usuário");
+            System.out.println("2 - Cliente");
+            System.out.println("3 - Produto");
+            System.out.println("4 - Venda");
             System.out.println("5 - Sair");
             int escolha = scanner.nextInt();
 
-            switch (escolha) {
+            switch(escolha) {
                 case 1:
-                    System.out.println();
-                    inserirUsuario(scanner);
+                    menuUsuario=true;
+                    while (menuUsuario) {
+                        System.out.println();
+                        System.out.println("[ Menu de Usuário ]");
+                        System.out.println("Escolha uma opção: ");
+                        System.out.println("1 - Inserir");
+                        System.out.println("2 - Alterar");
+                        System.out.println("3 - Listar");
+                        System.out.println("4 - Excluir");
+                        System.out.println("5 - Voltar");
+                        int escolhaUsuario = scanner.nextInt();
+
+                        switch (escolhaUsuario) {
+                            case 1:
+                                System.out.println();
+                                inserirUsuario(scanner);
+                                break;
+                            case 2:
+                                System.out.println();
+                                alterarUsuario(scanner);
+                                break;
+                            case 3:
+                                System.out.println();
+                                listarTodosUsuarios();
+                                break;
+                            case 4:
+                                System.out.println();
+                                excluirUsuario(scanner);
+                                break;
+                            case 5:
+                                menuUsuario = false;
+                                break;
+                            default:
+                                System.out.println("Opção inválida.");
+                        }
+                    }
                     break;
                 case 2:
-                    System.out.println();
-                    alterarUsuario(scanner);
+                    menuCliente = true;
+                    while (menuCliente){
+                        System.out.println();
+                        System.out.println("[ Menu de Cliente ]");
+                        System.out.println("Escolha uma opção: ");
+                        System.out.println("1 - Inserir");
+                        System.out.println("2 - Alterar");
+                        System.out.println("3 - Listar");
+                        System.out.println("4 - Excluir");
+                        System.out.println("5 - Voltar");
+                        int escolhaCliente = scanner.nextInt();
+
+                        switch (escolhaCliente) {
+                            case 1:
+                                System.out.println();
+                                inserirCliente(scanner);
+                                break;
+                            case 2:
+                                System.out.println();
+                                alterarCliente(scanner);
+                                break;
+                            case 3:
+                                System.out.println();
+                                listarTodosClientes();
+                                break;
+                            case 4:
+                                System.out.println();
+                                excluirCliente(scanner);
+                                break;
+                            case 5:
+                                menuCliente = false;
+                                break;
+                            default:
+                                System.out.println("Opção inválida.");
+                        }
+                    }
                     break;
                 case 3:
-                    System.out.println();
-                    listarTodosUsuarios();
-                    break;
+                    menuProduto = true;
+                    while (menuProduto){
+
+                    }
+                        break;
                 case 4:
-                    System.out.println();
-                    excluirUsuario(scanner);
-                    break;
+                    menuVenda = true;
+                    while (menuVenda){
+
+                    }
+                        break;
                 case 5:
-                    scanner.close();
-                    System.exit(0);
+                    menu = false;
+                    break;
                 default:
                     System.out.println("Opção inválida.");
             }
         }
+        scanner.close();
     }
 
     public static Connection connection() throws SQLException {
@@ -100,7 +169,7 @@ public class Main {
             String nascimento = scanner.nextLine();
 
             if (usuarioExistente(conn, usuario)) {
-                System.out.println("Usuário existente.");
+                System.out.println("Usuário já existente.");
                 return;
             }
 
@@ -111,7 +180,7 @@ public class Main {
             preparedStatement.setString(1, usuario);
             preparedStatement.setString(2, password);
             preparedStatement.setString(3, nome);
-            preparedStatement.setDate(4, java.sql.Date.valueOf(nascimento));
+            preparedStatement.setDate(4, Date.valueOf(nascimento));
             preparedStatement.executeUpdate();
             System.out.println("Usuário Inserido!");
 
@@ -134,21 +203,26 @@ public class Main {
     }
 
     public static void alterarUsuario(Scanner scanner) {
-        System.out.print("Digite o código do usuário para alteração: ");
-        int codigo = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Digite o novo usuário: ");
-        String novoUsuario = scanner.nextLine();
-        System.out.print("Digite a nova senha: ");
-        String novaSenha = scanner.nextLine();
-        System.out.print("Digite o novo nome: ");
-        String novoNome = scanner.nextLine();
-        System.out.print("Digite a nova data de nascimento(AAAA-MM-DD): ");
-        String novaDataNascimento = scanner.nextLine();
+        try {
+            Connection conn = connection();
+            System.out.print("Digite o código do usuário para alteração: ");
+            int codigo = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("Digite o novo usuário: ");
+            String novoUsuario = scanner.nextLine();
+            System.out.print("Digite a nova senha: ");
+            String novaSenha = scanner.nextLine();
+            System.out.print("Digite o novo nome: ");
+            String novoNome = scanner.nextLine();
+            System.out.print("Digite a nova data de nascimento(AAAA-MM-DD): ");
+            String novaDataNascimento = scanner.nextLine();
 
-        try (Connection conn = connection();
-             PreparedStatement preparedStatement = conn.prepareStatement(
-                     "UPDATE usuario SET username = ?, password = ?, nome = ?, nascimento = ? WHERE codigo = ?")) {
+            if (usuarioExistente(conn, novoUsuario)) {
+                System.out.println("Usuário já existente.");
+                return;
+            }
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "UPDATE usuario SET username = ?, password = ?, nome = ?, nascimento = ? WHERE codigo = ?");
             preparedStatement.setString(1, novoUsuario);
             preparedStatement.setString(2, novaSenha);
             preparedStatement.setString(3, novoNome);
@@ -204,6 +278,7 @@ public class Main {
         }
     }
 
+
     public static void criarTabelaCliente() {
         try {
             Connection conn = connection();
@@ -224,9 +299,19 @@ public class Main {
         }
     }
 
-    public static void inserirCliente(String nome, String CPF) {
+    public static void inserirCliente(Scanner scanner) {
         try {
             Connection conn = connection();
+            scanner.nextLine();
+            System.out.print("Digite seu nome: ");
+            String nome = scanner.nextLine();
+            System.out.print("Digite seu CPF: ");
+            String CPF = scanner.nextLine();
+
+            if (clienteExistente(conn, CPF)) {
+                System.out.println("CPF já existente.");
+                return;
+            }
             PreparedStatement preparedStatement = conn.prepareStatement(
                     "INSERT into cliente (nome, CPF)"
                             + "VALUES (?,?)"
@@ -236,7 +321,6 @@ public class Main {
             preparedStatement.setString(2, CPF);
 
             preparedStatement.executeUpdate();
-
             System.out.println("Cliente Inserido!");
 
         } catch (SQLException e) {
@@ -244,21 +328,87 @@ public class Main {
         }
     }
 
-    public static void listarTodosClientes(){
+    private static boolean clienteExistente(Connection conn, String CPF) {
+        try (PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT * FROM cliente WHERE CPF = ?")) {
+            preparedStatement.setString(1, CPF);
+            try (ResultSet resultado = preparedStatement.executeQuery()) {
+                return resultado.next();
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+    }
 
+    private static void alterarCliente(Scanner scanner) {
+        try {
+            Connection conn = connection();
+            System.out.print("Digite o código do cliente para alteração: ");
+            int id_cliente = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("Digite o novo nome: ");
+            String novoNome = scanner.nextLine();
+            System.out.print("Digite o novo CPF: ");
+            String novoCPF = scanner.nextLine();
+
+            if (clienteExistente(conn, novoCPF)) {
+                System.out.println("CPF já existente.");
+                return;
+            }
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "UPDATE cliente SET nome = ?, CPF = ? WHERE id_cliente = ?");
+            preparedStatement.setString(1, novoNome);
+            preparedStatement.setString(2, novoCPF);
+            preparedStatement.setInt(3, id_cliente);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Cliente atualizado!");
+            } else {
+                System.out.println("O cliente procurado não foi encontrado.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar cliente.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void listarTodosClientes(){
         try {
             Connection conn = connection();
             Statement statement = conn.createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM cliente");
             while(result.next()){
-                System.out.println(result.getInt("id_cliente"));
-                System.out.println(result.getString("nome"));
+                System.out.println("Código: " + result.getInt("id_cliente"));
+                System.out.println("Nome: " + result.getString("nome"));
+                System.out.println("CPF: " + result.getString("CPF"));
+                System.out.println("-------------------------");
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+    public static void excluirCliente(Scanner scanner) {
+        System.out.print("Digite o código do cliente para exclusão: ");
+        int id_cliente = scanner.nextInt();
+        try (
+                Connection conn = connection();
+                PreparedStatement preparedStatement = conn.prepareStatement(
+                        "DELETE FROM cliente WHERE id_cliente = ?")) {
+            preparedStatement.setInt(1, id_cliente);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Cliente excluído!");
+            } else {
+                System.out.println("O cliente não foi encontrado.");
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
 
     public static void criarTabelaProduto() {
         try {
@@ -300,7 +450,6 @@ public class Main {
         }
     }
 
-
     public static void listarTodosProdutos(){
 
         try {
@@ -317,6 +466,7 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+
 
     public static void criarTabelaVenda() {
         try {
