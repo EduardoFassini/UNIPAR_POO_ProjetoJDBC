@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.sql.Connection;
 import java.util.Scanner;
 
 import static org.junit.Assert.fail;
@@ -167,8 +166,8 @@ public class TestJDBC {
 
     @Test
     public void testInserirVenda() {
+        provideInput("\n2\n2\n");
         try {
-            provideInput("\n2\n2\n");
             Main.inserirVenda(new Scanner(System.in));
         } catch (Exception e) {
             e.printStackTrace();
