@@ -147,6 +147,39 @@ public class Main {
                 case 4:
                     menuVenda = true;
                     while (menuVenda){
+                        System.out.println();
+                        System.out.println("[ Menu de Venda ]");
+                        System.out.println("Escolha uma opção: ");
+                        System.out.println("1 - Inserir");
+                        System.out.println("2 - Alterar");
+                        System.out.println("3 - Listar");
+                        System.out.println("4 - Excluir");
+                        System.out.println("5 - Voltar");
+                        int escolhaVenda = scanner.nextInt();
+
+                        switch (escolhaVenda) {
+                            case 1:
+                                System.out.println();
+                                inserirVenda(scanner);
+                                break;
+                            case 2:
+                                System.out.println();
+                                alterarVenda(scanner);
+                                break;
+                            case 3:
+                                System.out.println();
+                                listarTodasVendas();
+                                break;
+                            case 4:
+                                System.out.println();
+                                excluirVenda(scanner);
+                                break;
+                            case 5:
+                                menuVenda = false;
+                                break;
+                            default:
+                                System.out.println("Opção inválida.");
+                        }
 
                     }
                         break;
@@ -164,6 +197,7 @@ public class Main {
 
         return DriverManager.getConnection(url,user,password);
     }
+
 
     public static void criarTabelaUsuario() {
         try {
@@ -267,13 +301,12 @@ public class Main {
                 System.out.println("O usuário procurado não foi encontrado.");
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao atualizar usuário.");
+            System.out.println("Erro ao alterar usuário.");
             e.printStackTrace();
         }
     }
 
     public static void listarTodosUsuarios(){
-
         try {
             Connection conn = connection();
             Statement statement = conn.createStatement();
@@ -291,13 +324,12 @@ public class Main {
     }
 
     public static void excluirUsuario(Scanner scanner) {
-        System.out.print("Digite o código do usuário para exclusão: ");
-        int codigo = scanner.nextInt();
-
-        try (
+        try {
              Connection conn = connection();
+             System.out.print("Digite o código do usuário para exclusão: ");
+             int codigo = scanner.nextInt();
              PreparedStatement preparedStatement = conn.prepareStatement(
-                     "DELETE FROM usuario WHERE codigo = ?")) {
+                     "DELETE FROM usuario WHERE codigo = ?");
             preparedStatement.setInt(1, codigo);
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
@@ -372,7 +404,7 @@ public class Main {
         }
     }
 
-    private static void alterarCliente(Scanner scanner) {
+    public static void alterarCliente(Scanner scanner) {
         try {
             Connection conn = connection();
             System.out.print("Digite o código do cliente para alteração: ");
@@ -399,7 +431,7 @@ public class Main {
                 System.out.println("O cliente procurado não foi encontrado.");
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao atualizar cliente.");
+            System.out.println("Erro ao alterar cliente.");
             e.printStackTrace();
         }
     }
@@ -421,13 +453,14 @@ public class Main {
     }
 
     public static void excluirCliente(Scanner scanner) {
-        System.out.print("Digite o código do cliente para exclusão: ");
-        int id_cliente = scanner.nextInt();
-        try (
-                Connection conn = connection();
-                PreparedStatement preparedStatement = conn.prepareStatement(
-                        "DELETE FROM cliente WHERE id_cliente = ?")) {
+        try {
+            Connection conn = connection();
+            System.out.print("Digite o código do cliente para exclusão: ");
+            int id_cliente = scanner.nextInt();
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                        "DELETE FROM cliente WHERE id_cliente = ?");
             preparedStatement.setInt(1, id_cliente);
+
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Cliente excluído!");
@@ -485,7 +518,7 @@ public class Main {
         }
     }
 
-    private static void alterarProduto(Scanner scanner){
+    public static void alterarProduto(Scanner scanner){
         try {
             Connection conn = connection();
             System.out.print("Digite o código do produto para alteração: ");
@@ -509,7 +542,7 @@ public class Main {
                 System.out.println("O produto procurado não foi encontrado.");
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao atualizar produto.");
+            System.out.println("Erro ao alterar produto.");
             e.printStackTrace();
         }
     }
@@ -520,9 +553,10 @@ public class Main {
             Statement statement = conn.createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM produto");
             while(result.next()){
-                System.out.println("ID: ["+result.getInt("id_produto")+
-                        "], Descrição: ["+result.getString("descricao")+
-                        "], Valor: ["+result.getString("valor")+"]");
+                System.out.println("Código: " + result.getInt("id_produto"));
+                System.out.println("Descrição: " + result.getString("descricao"));
+                System.out.println("Valor: " + result.getString("valor"));
+                System.out.println("-------------------------");
             }
 
         } catch (SQLException e) {
@@ -533,7 +567,7 @@ public class Main {
     public static void excluirProduto(Scanner scanner){
         try {
             Connection conn = connection();
-            System.out.print("Digite o código do produto para alteração: ");
+            System.out.print("Digite o código do produto para exclusão: ");
             int id_produto = scanner.nextInt();
              PreparedStatement preparedStatement = conn.prepareStatement(
                     "DELETE FROM produto WHERE id_produto = ?");
@@ -566,6 +600,95 @@ public class Main {
 
             System.out.println("Tabela de vendas criada com sucesso");
 
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static void inserirVenda(Scanner scanner){
+        try {
+            Connection conn = connection();
+            scanner.nextLine();
+            System.out.print("Digite o ID do cliente: ");
+            int cliente = scanner.nextInt();
+            System.out.print("Digite o ID do produto: ");
+            int produto = scanner.nextInt();
+
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "INSERT INTO venda (cliente, produto) VALUES (?, ?)");
+                preparedStatement.setInt(1, cliente);
+                preparedStatement.setInt(2, produto);
+
+            preparedStatement.executeUpdate();
+            System.out.println("Venda inserida!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void alterarVenda(Scanner scanner){
+        try {
+            Connection conn = connection();
+            System.out.print("Digite o código da venda para alteração: ");
+            int id_venda = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("Digite o ID do novo cliente: ");
+            int novoCliente = scanner.nextInt();
+            System.out.print("Digite o ID do novo produto: ");
+            int novoProduto = scanner.nextInt();
+
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "UPDATE venda SET cliente = ?, produto = ? WHERE id_venda = ?");
+            preparedStatement.setInt(1, novoCliente);
+            preparedStatement.setInt(2, novoProduto);
+            preparedStatement.setInt(3, id_venda);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Venda atualizada!");
+            } else {
+                System.out.println("A venda procurada não foi encontrada.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao alterar venda.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void listarTodasVendas(){
+        try {
+            Connection conn = connection();
+            Statement statement = conn.createStatement();
+            ResultSet result = statement.executeQuery("SELECT * FROM venda V, cliente C, produto P WHERE V.cliente = C.id_cliente AND V.produto = P.id_produto");
+            while(result.next()){
+                System.out.println("Código da Venda: " + result.getInt("id_venda"));
+                System.out.println("Código do Cliente: " + result.getInt("cliente"));
+                System.out.println("Nome do Cliente: " + result.getString("nome"));
+                System.out.println("Código do Produto: " + result.getInt("produto"));
+                System.out.println("Descrição do Produto: " + result.getString("descricao"));
+                System.out.println("-------------------------");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void excluirVenda(Scanner scanner){
+        try {
+            Connection conn = connection();
+            System.out.print("Digite o código da venda para exclusão: ");
+            int id_venda = scanner.nextInt();
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "DELETE FROM venda WHERE id_venda = ?");
+            preparedStatement.setInt(1, id_venda);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Venda excluída!");
+            } else {
+                System.out.println("A venda não foi encontrada.");
+            }
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
