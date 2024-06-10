@@ -38,7 +38,7 @@ public class TestJDBC {
 
     @Test
     public void testInserirUsuario() {
-        String input = "\nusuarioTest\nsenhaTest\nnomeTest\n2000-01-01\n";
+        String input = "\nusuario teste\nsenha teste\nUsuario Teste\n1991-11-11\n";
         Scanner scanner = new Scanner(input);
         try {
             Main.inserirUsuario(scanner);
