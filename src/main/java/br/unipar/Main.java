@@ -109,7 +109,39 @@ public class Main {
                 case 3:
                     menuProduto = true;
                     while (menuProduto){
+                        System.out.println();
+                        System.out.println("[ Menu de Produto ]");
+                        System.out.println("Escolha uma opção: ");
+                        System.out.println("1 - Inserir");
+                        System.out.println("2 - Alterar");
+                        System.out.println("3 - Listar");
+                        System.out.println("4 - Excluir");
+                        System.out.println("5 - Voltar");
+                        int escolhaProduto = scanner.nextInt();
 
+                        switch (escolhaProduto) {
+                            case 1:
+                                System.out.println();
+                                inserirProduto(scanner);
+                                break;
+                            case 2:
+                                System.out.println();
+                                alterarProduto(scanner);
+                                break;
+                            case 3:
+                                System.out.println();
+                                listarTodosProdutos();
+                                break;
+                            case 4:
+                                System.out.println();
+                                excluirProduto(scanner);
+                                break;
+                            case 5:
+                                menuProduto = false;
+                                break;
+                            default:
+                                System.out.println("Opção inválida.");
+                        }
                     }
                         break;
                 case 4:
@@ -315,7 +347,6 @@ public class Main {
             PreparedStatement preparedStatement = conn.prepareStatement(
                     "INSERT into cliente (nome, CPF)"
                             + "VALUES (?,?)"
-
             );
             preparedStatement.setString(1, nome);
             preparedStatement.setString(2, CPF);
@@ -430,19 +461,23 @@ public class Main {
         }
     }
 
-    public static void inserirProduto(String descricao, BigDecimal valor) {
+    public static void inserirProduto(Scanner scanner) {
         try {
             Connection conn = connection();
+            scanner.nextLine();
+            System.out.print("Digite a descrição: ");
+            String descricao = scanner.nextLine();
+            System.out.print("Digite o valor: ");
+            BigDecimal valor = new BigDecimal(scanner.nextLine());
+
             PreparedStatement preparedStatement = conn.prepareStatement(
                     "INSERT into produto (descricao, valor)"
                             + "VALUES (?,?)"
-
             );
             preparedStatement.setString(1, descricao);
             preparedStatement.setBigDecimal(2, valor.setScale(2, BigDecimal.ROUND_HALF_UP));
 
             preparedStatement.executeUpdate();
-
             System.out.println("Produto Inserido!");
 
         } catch (SQLException e) {
@@ -450,8 +485,36 @@ public class Main {
         }
     }
 
-    public static void listarTodosProdutos(){
+    private static void alterarProduto(Scanner scanner){
+        try {
+            Connection conn = connection();
+            System.out.print("Digite o código do produto para alteração: ");
+            int id_produto = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("Digite a nova descrição: ");
+            String novaDescricao = scanner.nextLine();
+            System.out.print("Digite o novo valor: ");
+            BigDecimal novoValor = new BigDecimal(scanner.nextLine());
 
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "UPDATE produto SET descricao = ?, valor = ? WHERE id_produto = ?");
+            preparedStatement.setString(1, novaDescricao);
+            preparedStatement.setBigDecimal(2, novoValor.setScale(2, BigDecimal.ROUND_HALF_UP));
+            preparedStatement.setInt(3, id_produto);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Produto atualizado!");
+            } else {
+                System.out.println("O produto procurado não foi encontrado.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar produto.");
+            e.printStackTrace();
+        }
+    }
+
+    public static void listarTodosProdutos(){
         try {
             Connection conn = connection();
             Statement statement = conn.createStatement();
@@ -464,6 +527,26 @@ public class Main {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void excluirProduto(Scanner scanner){
+        try {
+            Connection conn = connection();
+            System.out.print("Digite o código do produto para alteração: ");
+            int id_produto = scanner.nextInt();
+             PreparedStatement preparedStatement = conn.prepareStatement(
+                    "DELETE FROM produto WHERE id_produto = ?");
+            preparedStatement.setInt(1, id_produto);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Produto excluído!");
+            } else {
+                System.out.println("O produto não foi encontrado.");
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
 
