@@ -294,8 +294,8 @@ public class Main {
             preparedStatement.setString(3, novoNome);
             preparedStatement.setDate(4, Date.valueOf(novaDataNascimento));
             preparedStatement.setInt(5, codigo);
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
+            int registrosAlterados = preparedStatement.executeUpdate();
+            if (registrosAlterados > 0) {
                 System.out.println("Usuário atualizado!");
             } else {
                 System.out.println("O usuário procurado não foi encontrado.");
@@ -331,8 +331,8 @@ public class Main {
              PreparedStatement preparedStatement = conn.prepareStatement(
                      "DELETE FROM usuario WHERE codigo = ?");
             preparedStatement.setInt(1, codigo);
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
+            int registrosAlterados = preparedStatement.executeUpdate();
+            if (registrosAlterados > 0) {
                 System.out.println("Usuário excluído!");
             } else {
                 System.out.println("O usuário não foi encontrado.");
@@ -424,8 +424,8 @@ public class Main {
             preparedStatement.setString(1, novoNome);
             preparedStatement.setString(2, novoCPF);
             preparedStatement.setInt(3, id_cliente);
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
+            int registrosAlterados = preparedStatement.executeUpdate();
+            if (registrosAlterados > 0) {
                 System.out.println("Cliente atualizado!");
             } else {
                 System.out.println("O cliente procurado não foi encontrado.");
@@ -461,8 +461,8 @@ public class Main {
                         "DELETE FROM cliente WHERE id_cliente = ?");
             preparedStatement.setInt(1, id_cliente);
 
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
+            int registrosAlterados = preparedStatement.executeUpdate();
+            if (registrosAlterados > 0) {
                 System.out.println("Cliente excluído!");
             } else {
                 System.out.println("O cliente não foi encontrado.");
@@ -535,8 +535,8 @@ public class Main {
             preparedStatement.setBigDecimal(2, novoValor.setScale(2, BigDecimal.ROUND_HALF_UP));
             preparedStatement.setInt(3, id_produto);
 
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
+            int registrosAlterados = preparedStatement.executeUpdate();
+            if (registrosAlterados > 0) {
                 System.out.println("Produto atualizado!");
             } else {
                 System.out.println("O produto procurado não foi encontrado.");
@@ -573,8 +573,8 @@ public class Main {
                     "DELETE FROM produto WHERE id_produto = ?");
             preparedStatement.setInt(1, id_produto);
 
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
+            int registrosAlterados = preparedStatement.executeUpdate();
+            if (registrosAlterados > 0) {
                 System.out.println("Produto excluído!");
             } else {
                 System.out.println("O produto não foi encontrado.");
@@ -644,8 +644,8 @@ public class Main {
             preparedStatement.setInt(2, novoProduto);
             preparedStatement.setInt(3, id_venda);
 
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
+            int registrosAlterados = preparedStatement.executeUpdate();
+            if (registrosAlterados > 0) {
                 System.out.println("Venda atualizada!");
             } else {
                 System.out.println("A venda procurada não foi encontrada.");
@@ -683,8 +683,8 @@ public class Main {
                     "DELETE FROM venda WHERE id_venda = ?");
             preparedStatement.setInt(1, id_venda);
 
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
+            int registrosAlterados = preparedStatement.executeUpdate();
+            if (registrosAlterados > 0) {
                 System.out.println("Venda excluída!");
             } else {
                 System.out.println("A venda não foi encontrada.");

@@ -67,7 +67,7 @@ public class TestJDBC {
     @Test
     public void testExcluirUsuario() {
         try {
-            Main.excluirUsuario(new Scanner(new ByteArrayInputStream("1\n".getBytes())));
+            Main.excluirUsuario(new Scanner(new ByteArrayInputStream("23\n".getBytes())));
         } catch (Exception e) {
             fail("Falha ao excluir usuário: " + e.getMessage());
         }
@@ -80,9 +80,10 @@ public class TestJDBC {
 
     @Test
     public void testInserirCliente() {
-        provideInput("\nCliente Teste\n13253453299\n");
+        String input= "\nCliente Teste\n13253453299\n";
+        Scanner scanner = new Scanner(input);
         try {
-            Main.inserirCliente(new Scanner(System.in));
+            Main.inserirCliente(scanner);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.assertFalse(Boolean.parseBoolean("Falha ao inserir cliente: " + e.getMessage()));
